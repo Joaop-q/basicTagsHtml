@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fake Wikipédia</title>
+    <meta name="description" content="Página estilo Wikipédia sobre o anime Kimetsu no Yaiba (Demon Slayer)." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== Reset e tokens de design ===== */
+        :root {
+            --bg: #ffffff;
+            --text: #111827;
+            /* slate-900 */
+            --muted: #6b7280;
+            /* gray-500 */
+            --soft: #f3f4f6;
+            /* gray-100 */
+            --line: #e5e7eb;
+            /* gray-200 */
+            --brand: #2563eb;
+            /* blue-600 */
+            --brand-2: #1d4ed8;
+            /* blue-700 */
+            --radius: 14px;
+            --shadow: 0 8px 30px rgba(0, 0, 0, .06);
+            --maxw: 1200px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0b0f19;
+                --text: #e5e7eb;
+                --muted: #9ca3af;
+                --soft: #111827;
+                --line: #1f2937;
+                --brand: #60a5fa;
+                --brand-2: #93c5fd;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        a {
+            color: var(--brand);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== Acessibilidade ===== */
+        .skip-link {
+            position: absolute;
+            left: -999px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
+        .skip-link:focus {
+            position: fixed;
+            left: 1rem;
+            top: 1rem;
+            width: auto;
+            height: auto;
+            padding: .5rem .75rem;
+            background: var(--brand);
+            color: white;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        /* ===== Layout geral ===== */
+        header.site-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: saturate(180%) blur(10px);
+            background: color-mix(in oklab, var(--bg) 80%, transparent);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .header-inner {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: .75rem 1rem;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: .6rem;
+            font-weight: 700;
+        }
+
+        .brand .logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
+            box-shadow: var(--shadow);
+        }
+
+        nav.primary-nav ul {
+            list-style: none;
+            display: flex;
+            gap: .75rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav.primary-nav a {
+            padding: .4rem .6rem;
+            border-radius: 8px;
+        }
+
+        nav.primary-nav a[aria-current="page"] {
+            background: var(--soft);
+            text-decoration: none;
+        }
+
+        .search {
+            display: flex;
+            gap: .5rem;
+            align-items: center;
+            background: var(--soft);
+            padding: .35rem .5rem;
+            border-radius: 12px;
+            border: 1px solid var(--line);
+        }
+
+        .search input {
+            border: none;
+            background: transparent;
+            outline: none;
+            color: inherit;
+            min-width: 180px;
+        }
+
+        .search button {
+            border: 0;
+            background: var(--brand);
+            color: white;
+            padding: .45rem .7rem;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .search button:hover {
+            filter: brightness(0.95);
+        }
+
+        /* ===== Breadcrumb ===== */
+        nav.breadcrumb {
+            border-bottom: 1px solid var(--line);
+        }
+
+        .breadcrumb-inner {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: .5rem 1rem;
+            font-size: .9rem;
+            color: var(--muted);
+        }
+
+        .breadcrumb-inner a {
+            color: inherit;
+        }
+
+        /* ===== Conteúdo ===== */
+        .container {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 260px 1fr 280px;
+            gap: 1.5rem;
+        }
+
+        aside.toc {
+            position: sticky;
+            top: 76px;
+            align-self: start;
+        }
+
+        aside.sidebar {
+            position: sticky;
+            top: 76px;
+            align-self: start;
+        }
+
+        @media (max-width: 1100px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            aside.toc,
+            aside.sidebar {
+                position: static;
+            }
+        }
+
+        /* ===== TOC ===== */
+        .card {
+            background: var(--soft);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .card header {
+            padding: .75rem 1rem;
+            border-bottom: 1px solid var(--line);
+            font-weight: 600;
+        }
+
+        .card .body {
+            padding: .75rem 1rem;
+        }
+
+        .toc nav ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .toc nav li {
+            margin: .3rem 0;
+        }
+
+        .toc nav a {
+            font-size: .95rem;
+            color: var(--text);
+        }
+
+        .toc nav a:hover {
+            text-decoration: none;
+        }
+
+        /* ===== Artigo ===== */
+        article {
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        article header.article-header {
+            padding: 1rem 1.25rem 0.5rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .article-title {
+            margin: 0;
+            font-size: clamp(1.6rem, 2vw + .8rem, 2.4rem);
+            line-height: 1.2;
+        }
+
+        .article-meta {
+            color: var(--muted);
+            font-size: .9rem;
+            margin-top: .25rem;
+        }
+
+        .article-content {
+            padding: 1rem 1.25rem;
+        }
+
+        .article-content h2 {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: .35rem;
+            margin-top: 2rem;
+        }
+
+        .article-content h3 {
+            margin-top: 1.25rem;
+        }
+
+        .lead {
+            font-size: 1.05rem;
+            color: var(--muted);
+        }
+
+        figure.infobox {
+            float: right;
+            width: min(320px, 40%);
+            margin: 0 0 1rem 1rem;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--soft);
+        }
+
+        figure.infobox figcaption {
+            padding: .5rem .75rem;
+            font-size: .9rem;
+            color: var(--muted);
+            border-top: 1px solid var(--line);
+        }
+
+        .infobox table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .95rem;
+        }
+
+        .infobox th,
+        .infobox td {
+            padding: .5rem .75rem;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .infobox th {
+            width: 40%;
+            color: var(--muted);
+            font-weight: 500;
+        }
+
+        blockquote {
+            margin: 1rem 0;
+            padding: .75rem 1rem;
+            border-left: 4px solid var(--brand);
+            background: var(--soft);
+            border-radius: 10px;
+        }
+
+        code,
+        pre {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            background: var(--soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        code {
+            padding: .15rem .35rem;
+        }
+
+        pre {
+            padding: .75rem 1rem;
+            overflow-x: auto;
+        }
+
+        table.std {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: .95rem;
+        }
+
+        .std th,
+        .std td {
+            border: 1px solid var(--line);
+            padding: .5rem .75rem;
+        }
+
+        .std thead th {
+            background: var(--soft);
+            text-align: left;
+        }
+
+        /* ===== Lateral ===== */
+        .sidebar .widget+.widget {
+            margin-top: 1rem;
+        }
+
+        .widget ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .widget li {
+            padding: .4rem 0;
+            border-bottom: 1px dashed var(--line);
+        }
+
+        /* ===== Rodapé ===== */
+        footer.site-footer {
+            border-top: 1px solid var(--line);
+            margin-top: 2rem;
+        }
+
+        .footer-inner {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: 1rem;
+            font-size: .9rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#conteudo" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- ===== Cabeçalho global ===== -->
+    <header class="site-header" role="banner">
+        <div class="header-inner">
+            <a class="brand" href="#" aria-label="Página inicial">
+                <span class="logo" aria-hidden="true"></span>
+                <span>Fake Wikipédia</span>
+            </a>
+
+            <nav class="primary-nav" aria-label="Navegação principal">
+                <ul>
+                    <li><a href="#" aria-current="page">Artigos</a></li>
+                    <li><a href="#">Categorias</a></li>
+                    <li><a href="#">Sobre</a></li>
+                </ul>
+            </nav>
+
+            <form class="search" role="search" aria-label="Pesquisa global" action="#" method="get">
+                <input type="search" name="q" placeholder="Pesquisar artigos" aria-label="Buscar" />
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- ===== Breadcrumb ===== -->
+    <nav class="breadcrumb" aria-label="Trilha de navegação">
+        <div class="breadcrumb-inner">
+            <a href="#">Início</a> › <a href="#">Anime</a> › <span aria-current="page">Kimetsu no Yaiba</span>
+        </div>
+    </nav>
+
+    <!-- ===== Layout principal ===== -->
+    <main id="conteudo" class="container" role="main">
+        <div class="layout">
+
+            <!-- ===== Índice (TOC) ===== -->
+            <aside class="toc card" aria-label="Índice do artigo">
+                <header>Conteúdo</header>
+                <div class="body">
+                    <nav>
+                        <ul>
+                            <li><a href="#introducao">Introdução</a></li>
+                            <li><a href="#enredo">Enredo</a></li>
+                            <li><a href="#personagens">Personagens</a></li>
+                            <li><a href="#midia">Mídia</a></li>
+                            <li><a href="#recepcao">Recepção</a></li>
+                            <li><a href="#referencias">Referências</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- ===== Artigo ===== -->
+            <article aria-labelledby="titulo-artigo">
+                <header class="article-header">
+                    <h1 id="titulo-artigo" class="article-title">Kimetsu no Yaiba</h1>
+                    <p class="article-meta">Última edição: <time datetime="2025-08-27">27 ago 2025</time> · Categoria:
+                        <a href="#">Anime</a>
+                    </p>
+                </header>
+
+                <div class="article-content">
+                    <p class="lead"><em>Kimetsu no Yaiba</em> (鬼滅の刃, lit. “Lâmina Destruidora de Demônios”), também
+                        conhecido internacionalmente como <strong>Demon Slayer</strong>, é uma série de mangá japonesa
+                        escrita e ilustrada por <strong>Koyoharu Gotouge</strong>. Foi serializada de 2016 a 2020 na
+                        revista <em>Weekly Shōnen Jump</em> da Shueisha.</p>
+
+                    <figure class="infobox" role="group" aria-labelledby="infobox-titulo">
+                        <img src="/img/capa.jpg" alt="Capa do volume 1 de Kimetsu no Yaiba" />
+                        <figcaption id="infobox-titulo">Kimetsu no Yaiba — Volume 1</figcaption>
+                        <table aria-label="Informações sobre Kimetsu no Yaiba">
+                            <tbody>
+                                <tr>
+                                    <th>Gênero</th>
+                                    <td>Ação, Fantasia sombria</td>
+                                </tr>
+                                <tr>
+                                    <th>Autor</th>
+                                    <td>Koyoharu Gotouge</td>
+                                </tr>
+                                <tr>
+                                    <th>Editora</th>
+                                    <td>Shueisha</td>
+                                </tr>
+                                <tr>
+                                    <th>Período</th>
+                                    <td>2016 – 2020 (mangá)</td>
+                                </tr>
+                                <tr>
+                                    <th>Adaptação</th>
+                                    <td>Anime (2019 – presente)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </figure>
+
+                    <section id="introducao" aria-labelledby="h-intro">
+                        <h2 id="h-intro">Introdução</h2>
+                        <p>A obra ganhou grande popularidade mundial após a estreia de sua adaptação em anime em 2019,
+                            produzida pelo estúdio <strong>ufotable</strong>. O anime destacou-se pela qualidade da
+                            animação e trilha sonora, conquistando tanto o público japonês quanto o internacional.</p>
+                        <blockquote cite="https://en.wikipedia.org/wiki/Demon_Slayer:_Kimetsu_no_Yaiba">
+                            “Kimetsu no Yaiba revitalizou o interesse por animes de ação com sua estética visual e
+                            narrativa emocional.”
+                        </blockquote>
+                    </section>
+
+                    <section id="enredo" aria-labelledby="h-enredo">
+                        <h2 id="h-enredo">Enredo</h2>
+                        <p>A história segue <strong>Tanjiro Kamado</strong>, um jovem bondoso que vive nas montanhas com
+                            sua família. Após sua família ser massacrada por demônios e sua irmã mais nova,
+                            <strong>Nezuko</strong>, transformada em um deles, Tanjiro decide tornar-se um caçador de
+                            demônios para vingar sua família e encontrar uma cura para Nezuko.
+                        </p>
+                        <p>A narrativa acompanha a jornada de Tanjiro para se alistar no Corpo de Caçadores de Demônios,
+                            seus treinamentos, batalhas contra demônios poderosos e os laços que constrói com aliados
+                            como Zenitsu e Inosuke. A mitologia da série envolve as "Respirações" (técnicas especiais) e
+                            os Doze Kizuki — demônios de elite sob o comando de Muzan Kibutsuji.</p>
+                    </section>
+
+                    <section id="personagens" aria-labelledby="h-personagens">
+                        <h2 id="h-personagens">Personagens principais</h2>
+                        <ul>
+                            <li><strong>Tanjiro Kamado</strong> — protagonista, determinado e compassivo.</li>
+                            <li><strong>Nezuko Kamado</strong> — irmã de Tanjiro, transformada em demônio, mas que
+                                mantém comportamentos humanos.</li>
+                            <li><strong>Zenitsu Agatsuma</strong> — companheiro de Tanjiro, medroso, mas extremamente
+                                habilidoso em combate quando inconsciente.</li>
+                            <li><strong>Inosuke Hashibira</strong> — jovem agressivo criado pelas montanhas, usa máscara
+                                de javali e luta de forma selvagem.</li>
+                            <li><strong>Kyojuro Rengoku</strong> — Hashira das Chamas, figura central no arco do Trem
+                                Infinito.</li>
+                        </ul>
+
+                        <h3>Galeria</h3>
+                        <div
+                            style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:0.5rem; margin-top:0.75rem;">
+                            <figure
+                                style="background:var(--soft); padding:.4rem; border-radius:8px; text-align:center;">
+                                <img src="/img/tangiro.jpg" alt="Tanjiro Kamado"
+                                    style="max-height:140px; object-fit:contain;">
+                                <figcaption style="font-size:.85rem; color:var(--muted); padding-top:.25rem;">Tanjiro
+                                    Kamado</figcaption>
+                            </figure>
+                            <figure
+                                style="background:var(--soft); padding:.4rem; border-radius:8px; text-align:center;">
+                                <img src="/img/nezuko.jpg" alt="Nezuko Kamado"
+                                    style="max-height:140px; object-fit:contain;">
+                                <figcaption style="font-size:.85rem; color:var(--muted); padding-top:.25rem;">Nezuko
+                                    Kamado</figcaption>
+                            </figure>
+                            <figure
+                                style="background:var(--soft); padding:.4rem; border-radius:8px; text-align:center;">
+                                <img src="/img/zenitsu.png" alt="Zenitsu Agatsuma"
+                                    style="max-height:140px; object-fit:contain;">
+                                <figcaption style="font-size:.85rem; color:var(--muted); padding-top:.25rem;">Zenitsu
+                                    Agatsuma</figcaption>
+                            </figure>
+                            <figure
+                                style="background:var(--soft); padding:.4rem; border-radius:8px; text-align:center;">
+                                <img src="/img/inosuke.jpg" alt="Inosuke Hashibira"
+                                    style="max-height:140px; object-fit:contain;">
+                                <figcaption style="font-size:.85rem; color:var(--muted); padding-top:.25rem;">Inosuke
+                                    Hashibira</figcaption>
+                            </figure>
+                        </div>
+                    </section>
+
+                    <section id="midia" aria-labelledby="h-midia">
+                        <h2 id="h-midia">Mídia</h2>
+                        <p>Além do mangá e do anime televisivo, a franquia se expandiu com um filme de grande sucesso,
+                            <em>Kimetsu no Yaiba: Mugen Train</em> (2020), que bateu recordes de bilheteria no Japão. A
+                            marca também rendeu jogos, light novels e vasta merchandising.
+                        </p>
+
+                        <div
+                            style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:0.6rem; margin-top:0.75rem;">
+                            <figure
+                                style="background:var(--soft); padding:.5rem; border-radius:8px; text-align:center;">
+                                <img src="/img/filme.jpg" alt="Pôster do filme Mugen Train"
+                                    style="max-height:160px; object-fit:contain;">
+                                <figcaption style="font-size:.85rem; color:var(--muted); padding-top:.3rem;">Mugen Train
+                                    (2020)</figcaption>
+                            </figure>
+                            <figure
+                                style="background:var(--soft); padding:.5rem; border-radius:8px; text-align:center;">
+                                <img src="/img/hashiras.jpg" alt="Hashiras"
+                                    style="max-height:160px; object-fit:contain;">
+                                <figcaption style="font-size:.85rem; color:var(--muted); padding-top:.3rem;">Os Hashiras
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </section>
+
+                    <section id="recepcao" aria-labelledby="h-recepcao">
+                        <h2 id="h-recepcao">Recepção</h2>
+                        <p>O mangá alcançou mais de 150 milhões de cópias em circulação em 2021, posicionando-se entre
+                            os mangás mais vendidos da história. A adaptação em anime foi amplamente elogiada pela
+                            crítica, especialmente pela qualidade da animação produzida pela ufotable e pela trilha
+                            sonora. O filme <em>Mugen Train</em> tornou-se um fenômeno de bilheteria, recebendo vários
+                            prêmios e reconhecimentos.</p>
+                    </section>
+
+                    <section id="referencias" aria-labelledby="h-refs">
+                        <h2 id="h-refs">Referências</h2>
+                        <ol>
+                            <li><cite>Shueisha — Weekly Shōnen Jump</cite></li>
+                            <li><cite>ufotable — Produção do anime</cite></li>
+                            <li><cite>Oricon — Rankings de vendas</cite></li>
+                        </ol>
+                    </section>
+                </div>
+            </article>
+
+            <!-- ===== Lateral direita ===== -->
+            <aside class="sidebar" aria-label="Conteúdo relacionado">
+                <div class="widget card">
+                    <header>Artigos relacionados</header>
+                    <div class="body">
+                        <ul>
+                            <li><a href="#">Lista de episódios de Kimetsu no Yaiba</a></li>
+                            <li><a href="#">Mangás mais vendidos</a></li>
+                            <li><a href="#">Animes de ação</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="widget card">
+                    <header>Categorias</header>
+                    <div class="body">
+                        <ul>
+                            <li><a href="#">Anime</a></li>
+                            <li><a href="#">Mangá</a></li>
+                            <li><a href="#">Cultura pop japonesa</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+    </main>
+
+    <!-- ===== Rodapé global ===== -->
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-inner">
+            © 2025 Enciclopédia Exemplo • Conteúdo disponível sob licença CC BY-SA.
+        </div>
+    </footer>
+</body>
+
+</html>
